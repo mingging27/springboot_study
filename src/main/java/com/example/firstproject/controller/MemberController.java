@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -78,5 +79,18 @@ public class MemberController {
         }
 
         return "redirect:/members/"+member.getId();
+    }
+
+    @GetMapping("/members/{id}/delete")
+    public String delete(@PathVariable Long id, RedirectAttributes rttr) {
+        Member target = memberRepository.findById(id).orElse(null);
+
+        if (target != null) {
+            // addFlashAttribute가 꼭 뒤에 나와야 하나?
+            rttr.addFlashAttribute("msg", target.getEmail()+" 계정이 성공적으로 삭제되었습니다!");
+            memberRepository.delete(target);
+        }
+
+        return "redirect:/members";
     }
 }

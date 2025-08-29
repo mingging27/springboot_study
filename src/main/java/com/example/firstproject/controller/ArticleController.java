@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -95,5 +96,23 @@ public class ArticleController {
             articleRepository.save(article);
         }
         return "redirect:/articles/"+article.getId();
+    }
+
+    @GetMapping("/articles/{id}/delete")
+    public String delete(@PathVariable Long id, RedirectAttributes rttr) {
+        log.info("삭제 요청이 들어왔습니다!");
+
+        //1. 삭제할 대상 가져오기
+        Article target = articleRepository.findById(id).orElse(null);
+        log.info(target.toString());
+
+        //2. 대상 엔티티 삭제하기
+        if(target != null) {
+            articleRepository.delete(target);
+            //msg가 객체인 건가...?
+            rttr.addFlashAttribute("msg", "삭제됐습니다!");
+        }
+        //3. 결과 페이지로 리다이렉트하기
+        return "redirect:/articles";
     }
 }
