@@ -5,10 +5,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Entity
+@Getter //get~ 메서드: 외부에서 객체의 데이터를 읽을 때 사용
 @AllArgsConstructor
 @NoArgsConstructor  //기본 생성자 코드 추가 (JPA에서 필수)
 @ToString
@@ -20,4 +22,8 @@ public class Article {
     private String title;
     @Column
     private String content;
+
+//    public Long getId() {
+//        return this.id;
+//    }
 }
