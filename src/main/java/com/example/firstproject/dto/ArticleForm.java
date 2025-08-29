@@ -8,11 +8,11 @@ import lombok.ToString;
 @ToString   //toString() 메소드와 동일 효과
 
 public class ArticleForm {
+    private Long id;    //edit을 위한 아이디 필드 추가
     private String title;
     private String content;
 
-
     public Article toEntity() {
-        return new Article(null, title, content);
+        return new Article(id, title, content);
     }
 }
