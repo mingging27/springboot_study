@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Slf4j
-@RestController //어노테이션 다름
+@RestController
 public class CoffeeApiController {
     @Autowired
     private CoffeeRepository coffeeRepository;
@@ -22,7 +22,6 @@ public class CoffeeApiController {
     public Coffee create(@RequestBody CoffeeForm dto) {
         //dto->엔티티
         Coffee coffee = dto.toEntity();
-        log.info(coffee.toString());
 
         //저장한 엔티티 값 리턴
         return coffeeRepository.save(coffee);
@@ -43,26 +42,26 @@ public class CoffeeApiController {
 
     //PATCH
     @PatchMapping("/api/coffees/{id}")
-    public ResponseEntity update(@PathVariable Long id, @RequestBody CoffeeForm dto) {
+    public ResponseEntity<Coffee> update(@PathVariable Long id, @RequestBody CoffeeForm dto) {
         //dto->엔티티
         Coffee coffee = dto.toEntity();
 
         //기존 데이터 조회
         Coffee target = coffeeRepository.findById(id).orElse(null);
 
-        //잘못된 접근인지 확인
+        //잘못된 접근인지 확인 후 잘못된 요청(400) 반환
         if (target == null | id != coffee.getId()) {return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);}
 
-        //수정
+        //수정 후 정상 응답(200) 리턴
         target.patch(coffee);
-        coffeeRepository.save(target);
+        Coffee updated = coffeeRepository.save(target);
 
-        return ResponseEntity.status(HttpStatus.OK).body(target);
+        return ResponseEntity.status(HttpStatus.OK).body(updated);
     }
 
     //DELETE
     @DeleteMapping("/api/coffees/{id}")
-    public ResponseEntity delete(@PathVariable Long id) {
+    public ResponseEntity<Coffee>  delete(@PathVariable Long id) {
         //기존 데이터 가져오기
         Coffee target = coffeeRepository.findById(id).orElse(null);
 
