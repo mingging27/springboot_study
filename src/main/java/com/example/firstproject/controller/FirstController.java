@@ -35,4 +35,9 @@ public class FirstController {
         return "random-quote";
     }
 
+    @GetMapping("/quiz")
+    public String quiz() {
+        return "quiz";
+    }
+
 }
