@@ -8,6 +8,7 @@
                         data-bs-id="{{id}}" data-bs-nickname="{{nickname}}" data-bs-body="{{body}}" data-bs-article-id="{{articleId}}">
                     수정
                 </button>
+                <button type="button" class="btn btn-sm btn-outline-danger comment-delete-btn" data-bs-id="{{id}}">삭제</button>
             </div>
             <div class="card-body">
                 {{body}}
@@ -88,6 +89,37 @@
 
                 window.location.reload();
             })
+        });
+    }
+</script>
+
+<!--댓글 삭제-->
+<script>
+    {
+        const commentDeleteBtns = document.querySelectorAll(".comment-delete-btn");
+
+        commentDeleteBtns.forEach(btn => {
+            btn.addEventListener("click", (event) => {
+                // 버튼에서 id 가져오기
+                const id = btn.getAttribute("data-bs-id");
+
+                fetch('/api/comments/' + id, {
+                    method: 'DELETE'
+                })
+                .then(res => {
+                    if (!res.ok) {
+                        alert("삭제 실패!");
+                        return;
+                    }
+
+                    const target = document.querySelector(`#comments-${id}`);
+                    target.remove();
+
+                    alert(`${id}번 댓글을 삭제했습니다`);
+
+                   window.location.reload();
+                });
+            });
         });
     }
 </script>
