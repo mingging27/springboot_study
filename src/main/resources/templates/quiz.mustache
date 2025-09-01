@@ -1,18 +1,50 @@
 <html>
-    <head>
-        <title>셀프체크 17</title>
-    </head>
-    <body>
-        <h1>Hello, <span id="target">World</span>!</h1>
-        <input type="text" id="text-input">
-        <button id="send-btn">전송</button>
-        <script>
-            const target = document.querySelector("#target");
-            const btn = document.querySelector("#send-btn");
+<head>
+    <title>셀프체크 18</title>
+    <!-- ✅ CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<h1>모달로 데이터 전달</h1>
 
-            btn.addEventListener("click", () => {
-                target.innerText = document.querySelector("#text-input").value;
-            });
-        </script>
-    </body>
+<button id="trigger-btn" class="btn btn-primary"
+        data-bs-toggle="modal"
+        data-bs-target="#exampleModal"
+        data-custom-title="점심 뭐 먹지?"
+        data-custom-text="돈가스 어때?">트리거 버튼</button>
+
+<!-- ✅ 모달 -->
+<div id="exampleModal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="modal-title">???</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p id="modal-text">...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ✅ JS (bundle에는 modal 기능 포함됨) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    const modal = document.querySelector("#exampleModal");
+    const title_target = document.querySelector("#modal-title");
+    const text_target = document.querySelector("#modal-text");
+
+    modal.addEventListener("show.bs.modal", (event) => {
+        const triggerBtn = event.relatedTarget;
+
+        const title = triggerBtn.getAttribute("data-custom-title");
+        const text = triggerBtn.getAttribute("data-custom-text");
+
+        title_target.innerText = title;
+        text_target.innerText = text;
+    });
+</script>
+</body>
 </html>
